@@ -1,0 +1,10 @@
+.pwa-panel{margin:16px 0;background:var(--paper)}
+.pwa-panel>summary{font-size:13px}
+.pwa-status{display:block;color:var(--muted);font-size:12px;font-weight:400;margin-top:3px}
+.pwa-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.pwa-actions button{font:inherit;font-size:13px;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-height:44px;cursor:pointer}
+.pwa-actions button:disabled{opacity:.6;cursor:wait}
+.pwa-actions button:focus-visible{outline:3px solid #e8cc91;outline-offset:3px}
+.pwa-panel [hidden]{display:none}
+.pwa-panel p{font-size:13px;color:var(--muted)}
+@media print{.pwa-panel{display:none}}
