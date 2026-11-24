@@ -1,9 +1,9 @@
 'use strict';
 const PREFIX = 'laos-outing:' + self.registration.scope + ':';
-const CACHE = PREFIX + 'v8';
+const CACHE = PREFIX + 'v9';
 const ROOT = self.registration.scope;
 const READY = new URL('__offline-ready', ROOT).href;
-const PAGES = ['index.html', 'before-departure.html', 'transfers.html', 'night.html'];
+const PAGES = ['index.html', 'before-departure.html', 'transfers.html', 'night.html', 'tickets.html'];
 const CORE = [...PAGES, 'pwa.js', 'pwa.css', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 let saving;
 
