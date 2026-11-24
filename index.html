@@ -5,7 +5,14 @@
 /* Journey markers and chronological stops on the main timeline. */
 .timeline{position:relative;margin-left:6px;padding-left:18px;border-left:1px solid var(--line)}
 .day{position:relative}
-.day::before{content:"";position:absolute;left:-25px;top:25px;width:10px;height:10px;border:2px solid var(--green);border-radius:50%;background:#0f1412}
+.day{border-color:var(--day-border);border-left:5px solid var(--day-accent);background:linear-gradient(135deg,var(--day-tint),var(--paper) 55%)}
+.day .date,.day h2{color:var(--day-accent)}
+.day::before{content:"";position:absolute;left:-29px;top:25px;width:10px;height:10px;border:2px solid var(--day-accent);border-radius:50%;background:#0f1412}
+#out{--day-accent:#8ec8f2;--day-border:#39556b;--day-tint:#1a2b38}
+#day1{--day-accent:#9fdda9;--day-border:#3e6247;--day-tint:#1c3024}
+#day2{--day-accent:#f2c77e;--day-border:#70583a;--day-tint:#352b1f}
+#day3{--day-accent:#d7b4f4;--day-border:#604876;--day-tint:#2d2338}
+#home{--day-accent:#f2aab0;--day-border:#71434b;--day-tint:#352226}
 .events>li.travel{border-style:dashed;border-color:#66977b;background:#18251f}
 .transport-mode{display:flex;align-items:center;gap:4px;margin-top:5px;color:var(--green);font-size:11px;font-weight:400}
 .transport-mode span{font-size:16px;line-height:1.4}
@@ -15,7 +22,7 @@
 .journey>details{background:var(--paper)}
 .events>li>.lunch-details{grid-column:1/-1;min-width:0;margin-top:4px;background:var(--paper)}
 @media(max-width:380px){.events>li{grid-template-columns:62px minmax(0,1fr)}.journey{padding:10px}.journey-label{align-items:flex-start}.transport-mode{font-size:10px}}
-@media print{.events>li.travel,.journey{background:var(--soft);border-color:var(--green)}.day::before{background:white}}
+@media print{.events>li.travel,.journey{background:var(--soft);border-color:var(--green)}.day{background:white}.day::before{background:white}}
 .options.booked-departure{grid-template-columns:1fr}
 </style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="pwa.css"><script src="pwa.js" defer></script></head><body><main id="top"><header class="hero"><p class="eyebrow">OFFICE OUTING · LAOS</p><h1>เวียงจันทน์–วังเวียง</h1><p>26–30 พ.ย. 2569 · 5 คน</p></header><nav class="page-menu" aria-label="เมนูหน้าทริป"><a href="index.html" aria-current="page">แผนทริป</a><a href="before-departure.html" class="preparation">ก่อนออกเดินทาง</a><a href="transfers.html">ระยะทาง / ต่อรถ</a><a href="night.html">ร้านกลางคืน</a><a href="#documents">ตั๋ว &amp; ที่พัก</a></nav><section class="section-block" id="documents"><h2>ตั๋ว &amp; ที่พัก</h2><details><summary>ตั๋วรถไฟ · เลือกตามชื่อ</summary><div class="document-group" id="train-documents">
 <h4 class="document-direction">ขาไป</h4><ul class="document-grid">
