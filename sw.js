@@ -1,6 +1,6 @@
 'use strict';
 const PREFIX = 'laos-outing:' + self.registration.scope + ':';
-const CACHE = PREFIX + 'v6';
+const CACHE = PREFIX + 'v8';
 const ROOT = self.registration.scope;
 const READY = new URL('__offline-ready', ROOT).href;
 const PAGES = ['index.html', 'before-departure.html', 'transfers.html', 'night.html'];
