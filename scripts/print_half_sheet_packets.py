@@ -56,7 +56,19 @@ def plan_panel():
 
 def ticket_panel(title, source, label, kind):
     image = crop_image(source, f'_crop-{slug}-{kind}.png', 0.40)
-    return panel(title, f'<div class="ticket-image"><img src="{image}"></div><div class="crop-note">แสดงส่วนตั๋วสำหรับเดินทาง · ภาพต้นฉบับเต็มอยู่ในเว็บไซต์ทริป</div>', label)
+    body = f'<div class="ticket-image"><img src="{image}"></div>'
+    qr_dir = 'QR ขาไป 133' if kind == 'train-out' else 'QR ขากลับ 134'
+    qr_source = ROOT / 'source' / qr_dir / f'{name}.jpg'
+    if qr_source.is_file():
+        qr_image = Image.open(qr_source)
+        if qr_image.size != (1080, 2400):
+            raise ValueError((qr_source, qr_image.size))
+        qr_path = OUT / f'_crop-{slug}-{kind}-qr.png'
+        qr_image.crop((215, 470, 815, 1070)).save(qr_path, optimize=True)
+        temporary.append(qr_path)
+        body = f'<div class="ticket-with-qr">{body}<div class="thai-qr"><strong>QR ตรวจตั๋ว</strong><img src="{qr_path.as_uri()}"></div></div>'
+    body += '<div class="crop-note">แสดงส่วนตั๋วสำหรับเดินทาง · ภาพต้นฉบับเต็มอยู่ในเว็บไซต์ทริป</div>'
+    return panel(title, body, label)
 
 
 def lcr_panel():
@@ -94,6 +106,7 @@ STYLE = '''
 .plan-columns{display:grid;grid-template-columns:123mm 62mm;gap:4mm}.plan{font-size:8pt;line-height:1.36}.plan p{margin:0 0 2.3mm;padding:1.5mm 2mm;background:#f1f6f2;border-left:2mm solid #73907c}.plan p:nth-child(2){background:#f0f5f9;border-color:#5e90b3}.plan p:nth-child(4){background:#faf6ed;border-color:#d6a761}.plan-note{margin-top:1.5mm;border:1px solid #b9ccb9;padding:2mm;font-size:7pt;line-height:1.34}
 aside{border:1px solid #cfddd2;padding:1.5mm;text-align:center}.mini-label{font-size:7pt;font-weight:700;margin-bottom:1mm}.qr{display:block;width:100%;max-height:72mm;object-fit:contain}.activity{display:block;width:34mm;height:auto;max-height:39mm;margin:0 auto}
 .ticket-image,.hotel-image{height:107mm;display:flex;justify-content:center;align-items:flex-start}.ticket-image img{width:170mm;max-height:105mm;object-fit:contain}.hotel-image img{width:116mm;max-height:107mm;object-fit:contain}
+.ticket-with-qr{display:flex;justify-content:center;align-items:flex-start;gap:4mm}.ticket-with-qr .ticket-image{width:140mm}.ticket-with-qr .ticket-image img{width:140mm}.thai-qr{width:45mm;margin-top:12mm;text-align:center}.thai-qr strong{display:block;font-size:8pt;color:#234c36;margin-bottom:2mm}.thai-qr img{display:block;width:45mm;height:45mm;object-fit:contain}
 .crop-note{text-align:center;font-size:6.5pt;color:#596b60;margin-top:1mm}
 .lcr-pair{display:flex;justify-content:center;gap:16mm}.lcr-pair>div{text-align:center;width:62mm}.lcr-pair h3{font-size:8pt;margin:0 0 1mm;color:#234c36}.lcr-pair img{display:block;width:62mm;max-height:110mm;object-fit:contain}
 '''
@@ -114,7 +127,7 @@ for slug, name in PEOPLE.items():
         html = OUT / f'_half-sheet-{slug}.html'
         temporary.append(html)
         html.write_text(f'<!doctype html><html lang="th"><head><meta charset="utf-8"><style>{STYLE}</style></head><body>{sheets}</body></html>', encoding='utf-8')
-        pdf = OUT / f'trip-handout-a5-{slug}.pdf'
+        pdf = OUT / f'trip-handout-a5-qr-{slug}.pdf'
         subprocess.run([str(EDGE), '--headless=new', '--disable-gpu', '--no-pdf-header-footer', '--allow-file-access-from-files', f'--print-to-pdf={pdf}', html.as_uri()], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         print(slug, pdf.stat().st_size)
     finally:
