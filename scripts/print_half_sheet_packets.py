@@ -61,10 +61,14 @@ def ticket_panel(title, source, label, kind):
     qr_source = ROOT / 'source' / qr_dir / f'{name}.jpg'
     if qr_source.is_file():
         qr_image = Image.open(qr_source)
-        if qr_image.size != (1080, 2400):
+        qr_boxes = {
+            (1080, 2400): (215, 470, 815, 1070),
+            (837, 1953): (190, 385, 605, 800),
+        }
+        if qr_image.size not in qr_boxes:
             raise ValueError((qr_source, qr_image.size))
         qr_path = OUT / f'_crop-{slug}-{kind}-qr.png'
-        qr_image.crop((215, 470, 815, 1070)).save(qr_path, optimize=True)
+        qr_image.crop(qr_boxes[qr_image.size]).save(qr_path, optimize=True)
         temporary.append(qr_path)
         body = f'<div class="ticket-with-qr">{body}<div class="thai-qr"><strong>QR ตรวจตั๋ว</strong><img src="{qr_path.as_uri()}"></div></div>'
     body += '<div class="crop-note">แสดงส่วนตั๋วสำหรับเดินทาง · ภาพต้นฉบับเต็มอยู่ในเว็บไซต์ทริป</div>'
@@ -127,7 +131,7 @@ for slug, name in PEOPLE.items():
         html = OUT / f'_half-sheet-{slug}.html'
         temporary.append(html)
         html.write_text(f'<!doctype html><html lang="th"><head><meta charset="utf-8"><style>{STYLE}</style></head><body>{sheets}</body></html>', encoding='utf-8')
-        pdf = OUT / f'trip-handout-a5-qr-{slug}.pdf'
+        pdf = OUT / f'trip-handout-a5-all-qr-{slug}.pdf'
         subprocess.run([str(EDGE), '--headless=new', '--disable-gpu', '--no-pdf-header-footer', '--allow-file-access-from-files', f'--print-to-pdf={pdf}', html.as_uri()], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         print(slug, pdf.stat().st_size)
     finally:
